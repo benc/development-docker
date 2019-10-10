@@ -1,0 +1,22 @@
+version: "3.7"
+
+networks:
+  playground-net:
+    external: true
+
+services:
+  netdata:
+    image: netdata/netdata
+    networks:
+      - playground-net
+    ports:
+      - 19999:19999
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro

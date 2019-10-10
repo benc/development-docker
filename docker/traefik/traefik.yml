@@ -1,0 +1,31 @@
+# static configuration - https://docs.traefik.io/reference/static-configuration/file/
+log:
+  level: INFO
+  filePath: /var/log/traefik/traefik.log
+
+accessLog:
+  filePath: /var/log/traefik/access.log
+
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+providers:
+  docker:
+    watch: true
+    network: playground-net
+    # If set to false, containers that don't have a traefik.enable=true label will be ignored from the resulting routing configuration.
+    # exposedByDefault: false
+
+# https://docs.traefik.io/operations/api/#endpoints
+api:
+  dashboard: true
+  insecure: true
+  debug: true
+# tracing:
+#   servicename: tracing
+#   jaeger:
+#     samplingParam: 1
+#     samplingServerURL: 'http://12.0.0.1:5778/sampling'
+#     samplingType: const
+#     localAgentHostPort: '12.0.0.1:6831'

@@ -1,0 +1,19 @@
+version: "3.7"
+
+networks:
+  playground-net:
+    external: true
+
+services:
+  mailcatcher:
+    image: schickling/mailcatcher
+    networks:
+      - playground-net
+    ports:
+      - 1025:25
+      - 1080:1080
+      # - 1080:80
+    # TODO mailcatcher should support context paths https://github.com/sj26/mailcatcher/issues/227
+    # labels:
+    #   - "traefik.http.routers.mailcatcher.rule=StripPrefix(`/mailcatcher/`)"
+    #   - "traefik.http.services.mailcatcher.loadbalancer.server.port=1080"

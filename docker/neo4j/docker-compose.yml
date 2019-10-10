@@ -1,0 +1,25 @@
+version: "3.7"
+
+networks:
+  playground-net:
+    external: true
+
+services:
+
+  neo4j:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - playground-net
+    ports:
+      - 7687:7687
+      - 7474:7474
+      - 7473:7473
+    volumes:
+      - ./logs:/logs
+    labels:
+      - "traefik.http.routers.neo4j.rule=PathPrefix(`/neo4j`)"
+      - "traefik.http.routers.neo4j.middlewares=neo4j_prefix@docker"
+      - "traefik.http.middlewares.neo4j_prefix.stripprefix.prefixes=/neo4j"
+      - "traefik.http.services.neo4j.loadbalancer.server.port=7474"

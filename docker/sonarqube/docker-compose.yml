@@ -1,0 +1,35 @@
+version: "3.7"
+
+networks:
+  playground-net:
+    external: true
+
+services:
+
+  sonarqube:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # ports:
+    #   - 9000:9000
+    networks:
+      - playground-net
+    labels:
+      - traefik.http.routers.sonarqube.rule=PathPrefix(`/sonar/`)
+      - traefik.http.services.sonarqube.loadbalancer.server.port=9000
+    volumes:
+      - ./logs:/opt/sonarqube/logs
+    environment:
+      - sonar.jdbc.username=postgres
+      - sonar.jdbc.password=postgres
+      - sonar.jdbc.url=jdbc:postgresql://sonarqube-db:5432/sonar
+      - sonar.web.context=/sonar
+
+  sonarqube-db:
+    image: postgres:11-alpine
+    networks:
+      - playground-net
+    environment: # https://github.com/docker-library/docs/tree/master/postgres#environment-variables
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: sonar

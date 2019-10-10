@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+export BASEDIR
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd ..; pwd)"
+
+COMPONENT=$1
+
+if [ -z $COMPONENT ]; then
+  echo "Which component do we need to stop (1 of the subdirs, ie traefik)"
+  exit 1
+fi
+
+cd "$BASEDIR/docker/$COMPONENT"
+
+docker-compose stop

@@ -1,0 +1,35 @@
+version: "3.7"
+
+networks:
+  playground-net:
+    external: true
+  development-net:
+    external: true
+  management-net:
+    external: true
+
+services:
+  traefik:
+    image: traefik:latest
+    dns_search: .
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    networks:
+      playground-net:
+      management-net:
+      development-net:
+        aliases: # alternative hostname to be published on this network
+        - apigateway
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./logs:/var/log/traefik
+      - ./acme:/etc/traefik/acme
+    labels:
+      - "traefik.http.routers.traefik.rule=PathPrefix(`/traefik`)"
+      - "traefik.http.middlewares.traefik-stripprefix.stripprefix.prefixes=/traefik"
+      - "traefik.http.routers.traefik.middlewares=traefik-stripprefix"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"

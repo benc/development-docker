@@ -1,0 +1,20 @@
+version: "3.7"
+
+networks:
+  playground-net:
+    external: true
+
+services:
+
+  elasticsearch6:
+    image: elasticsearch:6.7.2
+    networks:
+      - playground-net
+    ports:
+      - 9200:9200
+      - 9300:9300
+    labels:
+      - "traefik.http.routers.elasticsearch.rule=PathPrefix(`/elasticsearch/`)"
+      - "traefik.http.routers.elasticsearch.middlewares=elasticsearch-prefix@docker"
+      - "traefik.http.middlewares.elasticsearch-prefix.stripprefix.prefixes=/elasticsearch"
+      - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"

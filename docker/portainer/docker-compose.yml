@@ -1,0 +1,20 @@
+version: "3.7"
+
+networks:
+  management-net:
+    external: true
+
+services:
+  portainer:
+    image: portainer/portainer:latest
+    restart: always
+    command: --no-auth -H unix:///var/run/docker.sock
+    networks:
+      - management-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.http.routers.portainer.rule=PathPrefix(`/portainer/`)"
+      - "traefik.http.routers.portainer.middlewares=portainer_prefix@docker"
+      - "traefik.http.middlewares.portainer_prefix.stripprefix.prefixes=/portainer"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
