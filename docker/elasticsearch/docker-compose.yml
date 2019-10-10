@@ -1,0 +1,15 @@
+version: "3.7"
+
+networks:
+  playground-net:
+    external: true
+
+services:
+
+  elasticsearch:
+    image: elasticsearch:latest
+    networks:
+      - playground-net
+    ports:
+      - 9200:9200
+      - 9300:9300
