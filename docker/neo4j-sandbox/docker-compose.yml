@@ -13,9 +13,9 @@ services:
     networks:
       - playground-net
     ports:
-      - 7687:7687
-      - 7474:7474
-      - 7473:7473
+      - 17687:7687
+      - 17474:7474
+      - 17473:7473
     volumes:
       - ./logs:/logs
     labels:

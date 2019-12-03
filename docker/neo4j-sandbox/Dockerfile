@@ -12,7 +12,7 @@ ENV NEO4J_dbms_security_auth__enabled=false
 ENV NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
 
 # APOC plugin
-ENV APOC_VERSION 3.5.0.4
+ENV APOC_VERSION 3.5.0.6
 ENV APOC_JAR apoc-${APOC_VERSION}-all.jar
 ENV APOC_URI https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/${APOC_VERSION}/${APOC_JAR}
 RUN curl --fail --silent --show-error --location --output ${APOC_JAR} ${APOC_URI} && mv ${APOC_JAR} plugins/${APOC_JAR}
