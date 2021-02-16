@@ -1,5 +1,5 @@
 FROM sonarqube
-MAINTAINER Ben Cochez <ben@cochez.consulting>
+LABEL maintainer="ben@corepoint.be"
 
 # https://github.com/SonarSource/sonar-update-center-properties/
 ENV SONAR_JAVA_PLUGIN 5.14.0.18788

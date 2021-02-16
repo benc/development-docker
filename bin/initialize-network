@@ -2,5 +2,5 @@
 set -e
 
 docker network create playground-net
-docker network create management-net
+# docker network create management-net
 docker network create development-net

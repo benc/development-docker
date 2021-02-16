@@ -1,6 +1,6 @@
 FROM neo4j:enterprise
 #FROM ongdb:latest
-MAINTAINER Ben Cochez <ben@cochez.consulting>
+LABEL maintainer="ben@corepoint.be"
 
 # Configureer Neo4j
 # https://neo4j.com/docs/operations-manual/current/reference/configuration-settings/
