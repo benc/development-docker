@@ -33,7 +33,10 @@ services:
 
   cvat:
     container_name: cvat
-    image: openvino/cvat_server:latest
+    # image: openvino/cvat_server:latest
+    build:
+      context: ./cvat/github/
+      dockerfile: Dockerfile
     restart: always
     depends_on:
       - cvat_redis
@@ -57,7 +60,10 @@ services:
 
   cvat_ui:
     container_name: cvat_ui
-    image: openvino/cvat_ui:latest
+    # image: openvino/cvat_ui:latest
+    build:
+      context: ./cvat/github/
+      dockerfile: Dockerfile.ui
     restart: always
     networks:
       - playground-net

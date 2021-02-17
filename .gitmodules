@@ -1,0 +1,3 @@
+[submodule "docker/cvat/cvat/github"]
+	path = docker/cvat/cvat/github
+	url = https://github.com/benc/cvat
