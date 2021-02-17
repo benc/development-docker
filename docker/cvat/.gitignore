@@ -1,4 +1,5 @@
-cvat_data
-cvat_logs
-cvat_models
-cvat_keys
+cvat/data
+cvat/logs
+cvat/models
+cvat/keys
+postgres/data

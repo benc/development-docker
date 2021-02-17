@@ -1,5 +1,8 @@
-# original https://raw.githubusercontent.com/openvinotoolkit/cvat/master/docker-compose.yml
-# nuclio https://raw.githubusercontent.com/stanford-rc/gcp-cvat-stanford/master/docker-compose.yml
+# original: https://raw.githubusercontent.com/openvinotoolkit/cvat/develop/docker-compose.yml
+# with nuclio:
+# - https://raw.githubusercontent.com/stanford-rc/gcp-cvat-stanford/master/docker-compose.yml
+# - https://raw.githubusercontent.com/openvinotoolkit/cvat/develop/components/serverless/docker-compose.serverless.yml
+# cvat installation guide https://github.com/openvinotoolkit/cvat/blob/develop/cvat/apps/documentation/AWS-Deployment-Guide.md
 
 version: "3.7"
 
@@ -25,6 +28,8 @@ services:
     environment: # https://github.com/docker-library/docs/tree/master/postgres#environment-variables
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
 
   cvat:
     container_name: cvat
@@ -43,11 +48,12 @@ services:
       CVAT_POSTGRES_DBNAME: "cvat"
       CVAT_POSTGRES_USER: "cvat"
       CVAT_POSTGRES_PASSWORD: "cvat"
+      CVAT_SERVERLESS: 1
     volumes:
-      - ./cvat_data:/home/django/data
-      - ./cvat_keys:/home/django/keys
-      - ./cvat_logs:/home/django/logs
-      - ./cvat_models:/home/django/models
+      - ./cvat/data:/home/django/data
+      - ./cvat/keys:/home/django/keys
+      - ./cvat/logs:/home/django/logs
+      - ./cvat/models:/home/django/models
 
   cvat_ui:
     container_name: cvat_ui
@@ -72,6 +78,24 @@ services:
     ports:
       - '8095:80'
     volumes:
-      - ./cvat_proxy/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./cvat_proxy/conf.d/cvat.conf.template:/etc/nginx/conf.d/cvat.conf.template:ro
+      - ./cvat/proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./cvat/proxy/conf.d/cvat.conf.template:/etc/nginx/conf.d/cvat.conf.template:ro
     command: /bin/sh -c "envsubst '$$CVAT_HOST' < /etc/nginx/conf.d/cvat.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+
+  serverless:
+    container_name: nuclio-dashboard
+    # image: quay.io/nuclio/dashboard:stable-amd64
+    image: quay.io/nuclio/dashboard:1.5.16-amd64
+    restart: always
+    networks:
+      playground-net:
+        aliases:
+          - nuclio # cvat expects nuclio to run on this hostname
+    volumes:
+      - /tmp:/tmp
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      NUCLIO_CHECK_FUNCTION_CONTAINERS_HEALTHINESS: 'true'
+      NUCLIO_DASHBOARD_DEFAULT_FUNCTION_MOUNT_MODE: 'volume'
+    ports:
+      - "8070:8070"

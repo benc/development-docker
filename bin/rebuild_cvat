@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+export BASEDIR
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"; cd ..; pwd)"
+
+./bin/rebuild cvat
+
+# create admin user
+# docker exec -it cvat bash -ic 'python3 ~/manage.py createsuperuser'
+
+# TODO import models
