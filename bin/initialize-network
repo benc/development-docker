@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
 
-docker network create playground-net
-# docker network create management-net
-docker network create development-net
+docker network create playground-net || true
+docker network create management-net || true
+docker network create development-net || true
