@@ -14,7 +14,10 @@ services:
   cvat_redis:
     image: redis:4.0-alpine
     networks:
-      - playground-net
+      playground-net:
+        aliases:
+          - redis
+
     restart: always
 
   cvat_db:
@@ -37,6 +40,12 @@ services:
     build:
       context: ./cvat/github/
       dockerfile: Dockerfile
+      args:
+        TF_ANNOTATION: "no"
+        USER: "django"
+        DJANGO_CONFIGURATION: "production"
+        WITH_TESTS: "no"
+        TZ: "Etc/UTC"
     restart: always
     depends_on:
       - cvat_redis
@@ -66,7 +75,9 @@ services:
       dockerfile: Dockerfile.ui
     restart: always
     networks:
-      - playground-net
+      playground-net:
+        aliases:
+          - ui
     depends_on:
       - cvat
 
