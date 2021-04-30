@@ -18,7 +18,7 @@ services:
         aliases:
           - redis
 
-    restart: always
+    restart: "no"
 
   cvat_db:
     build:
@@ -46,7 +46,7 @@ services:
         DJANGO_CONFIGURATION: "production"
         WITH_TESTS: "no"
         TZ: "Etc/UTC"
-    restart: always
+    restart: "no"
     depends_on:
       - cvat_redis
       - cvat_db
@@ -73,7 +73,7 @@ services:
     build:
       context: ./cvat/github/
       dockerfile: Dockerfile.ui
-    restart: always
+    restart: "no"
     networks:
       playground-net:
         aliases:
@@ -84,7 +84,7 @@ services:
   cvat_proxy:
     container_name: cvat_proxy
     image: nginx:stable-alpine
-    restart: always
+    restart: "no"
     depends_on:
       - cvat
       - cvat_ui
@@ -103,7 +103,7 @@ services:
     container_name: nuclio-dashboard
     # image: quay.io/nuclio/dashboard:stable-amd64
     image: quay.io/nuclio/dashboard:1.5.16-amd64
-    restart: always
+    restart: "no"
     networks:
       playground-net:
         aliases:
