@@ -6,13 +6,15 @@ networks:
 
 services:
   portainer:
-    image: portainer/portainer:latest
+    image: portainer/portainer-ce:latest
     restart: always
-    command: --no-auth -H unix:///var/run/docker.sock
+    command: -H unix:///var/run/docker.sock
     networks:
       - management-net
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9000:9000
     labels:
       - "traefik.http.routers.portainer.rule=PathPrefix(`/portainer/`)"
       - "traefik.http.routers.portainer.middlewares=portainer_prefix@docker"

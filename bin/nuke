@@ -12,5 +12,5 @@ fi
 
 cd "$BASEDIR/docker/$COMPONENT"
 
-docker-compose rm --force --stop -v
-docker-compose down --rmi all # also delete images
+docker compose rm --force --stop -v
+docker compose down --rmi all # also delete images

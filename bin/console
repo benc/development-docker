@@ -13,4 +13,4 @@ fi
 
 cd "$BASEDIR/docker/$COMPONENT"
 
-docker-compose stop; docker-compose up --remove-orphans
+docker compose stop; docker compose up --remove-orphans
